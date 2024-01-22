@@ -15,8 +15,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var poundPrice: UILabel!
     
     @IBOutlet weak var realPrice: UILabel!
-    @IBOutlet weak var lastUpdatedPrice: UILabel!
-    
+    @IBOutlet weak var lastUpdated: UILabel!
+
     let urlString = "https://api.coingecko.com/api/v3/exchange_rates"
     
     
@@ -24,7 +24,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        fetchData();
+        fetchData()
+        
+        let timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
+    }
+    
+    @objc func refreshData() -> Void
+    {
+        fetchData()
     }
     
     func fetchData()
@@ -65,10 +72,11 @@ class ViewController: UIViewController {
             
             
             self.btcPrice.text = self.formatPrices(currency.btc)
-            self.euroPrice.text = self.formatPrices(currency.btc)
-            self.poundPrice.text = self.formatPrices(currency.btc)
-            self.realPrice.text = self.formatPrices(currency.btc)
-            self.lastUpdatedPrice.text = self.formatDate(date: Date())
+            self.euroPrice.text = self.formatPrices(currency.eur)
+            self.poundPrice.text = self.formatPrices(currency.gbp)
+            self.realPrice.text = self.formatPrices(currency.brl)
+            
+            self.lastUpdated.text = self.formatDate(date: Date())
         }
     }
     
@@ -92,9 +100,9 @@ class ViewController: UIViewController {
     struct Currency: Codable
     {
         let btc: Price
-        let usd: Price
-        let eth: Price
-        let aud: Price
+        let eur: Price
+        let gbp: Price
+        let brl: Price
     }
     
     struct Price: Codable
